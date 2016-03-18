@@ -27,31 +27,37 @@
  	this.vertices = [];
  	this.indices = [];
  	this.normals = [];
-
- 	for(var i = 0;i< this.slices;i++){
+	var andarTam = 1/(this.stacks);
+	
+	for(var j = 0;j < this.stacks;j++){
 		
-		this.vertices.push(Math.cos(teta*(i)), Math.sin(teta*(i)), 0);
-		this.vertices.push(Math.cos(teta*(i)), Math.sin(teta*(i)), 1);
-		this.vertices.push(Math.cos(teta*(i+1)), Math.sin(teta*(i+1)), 0);
-		this.vertices.push(Math.cos(teta*(i+1)), Math.sin(teta*(i+1)), 1);
-
+		var zpos = j*andarTam;
 		
-		this.indices.push(4*i);
-		this.indices.push(4*i+2);
-		this.indices.push(4*i+1);
-		
-		this.indices.push(4*i+2);
-		this.indices.push(4*i+3);
-		this.indices.push(4*i+1);
+		for(var i = 0;i < this.slices;i++){
+			
+			this.vertices.push(Math.cos(teta*(i)), Math.sin(teta*(i)), zpos);
+			this.vertices.push(Math.cos(teta*(i)), Math.sin(teta*(i)), zpos + andarTam);
+			this.vertices.push(Math.cos(teta*(i+1)), Math.sin(teta*(i+1)), zpos);
+			this.vertices.push(Math.cos(teta*(i+1)), Math.sin(teta*(i+1)), zpos + andarTam);
+			
+			var aux = 4*i + j*4*this.slices;
+			this.indices.push(aux+0);
+			this.indices.push(aux+2);
+			this.indices.push(aux+1);
+			this.indices.push(aux+2);
+			this.indices.push(aux+3);
+			this.indices.push(aux+1);
 
-
-		var ang = teta*i + teta/2;
-		this.normals.push(Math.cos(ang), Math.sin(ang), 0);
-		this.normals.push(Math.cos(ang), Math.sin(ang), 0);
-		this.normals.push(Math.cos(ang), Math.sin(ang), 0);
-		this.normals.push(Math.cos(ang), Math.sin(ang), 0);
- 	}
-
+			var ang = teta*i + teta/2;
+			var xNormal = Math.cos(ang);
+			var yNormal = Math.sin(ang);
+			this.normals.push(xNormal, yNormal, 0);
+			this.normals.push(xNormal, yNormal, 0);
+			this.normals.push(xNormal, yNormal, 0);
+			this.normals.push(xNormal, yNormal, 0);
+ 		}
+	}
+ 	
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };
